@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelSpam AI | Enterprise Threat Intelligence & Explainable NLP Platform</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Chart.js 4.4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body class="theme-saas">
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="brand-info">
+          <h2>SentinelSpam<span class="accent-dot">.ai</span></h2>
+          <p class="brand-tag">Cyber Threat Intelligence</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="home-tab">
+          <i class="fa-solid fa-house"></i>
+          <span>Overview</span>
+        </button>
+        <button class="nav-item" data-tab="classify-tab">
+          <i class="fa-solid fa-envelope-open-text"></i>
+          <span>Email Classifier</span>
+        </button>
+        <button class="nav-item" data-tab="bulk-tab">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Bulk CSV Scanner</span>
+        </button>
+        <button class="nav-item" data-tab="dashboard-tab">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>ML & ROC Analytics</span>
+        </button>
+        <button class="nav-item" data-tab="history-tab">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Audit History</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="model-badge-card">
+          <div class="model-status-indicator">
+            <span class="pulse-dot"></span>
+            <span class="model-status-text">Production Engine Online</span>
+          </div>
+          <p class="model-engine-name" id="sidebar-champion-model">Calibrated Linear SVM</p>
+          <div class="model-engine-stat">
+            <span>Accuracy / ROC-AUC</span>
+            <strong id="sidebar-accuracy">98.45% / 0.992</strong>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobile-toggle" class="mobile-toggle" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="page-title-box">
+            <h1 id="page-title">Threat Intelligence Overview</h1>
+            <p id="page-subtitle">Production-grade NLP spam & phishing detection powered by Scikit-Learn & XAI</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="engine-pill">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Latency: &lt;15ms</span>
+          </div>
+          <button class="btn btn-outline" id="quick-classify-btn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Quick Test</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="content-body">
+        
+        <!-- 1. Home / Overview Tab -->
+        <section id="home-tab" class="tab-pane active">
+          <!-- Hero Banner -->
+          <div class="hero-card">
+            <div class="hero-content">
+              <span class="hero-chip"><i class="fa-solid fa-shield-virus"></i> Explainable AI Threat Platform</span>
+              <h2>Enterprise-Grade Spam & Phishing Classification</h2>
+              <p>
+                SentinelSpam inspects email payloads using sublinear TF-IDF vectorization, Platt-calibrated Support Vector boundaries, and dual-layer heuristic phishing intelligence. Built to uncover hidden social engineering attacks with full feature attribution transparency.
+              </p>
+              <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" onclick="switchTab('classify-tab')">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Classify Email Now
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="switchTab('bulk-tab')">
+                  <i class="fa-solid fa-file-arrow-up"></i> Bulk CSV Scanner
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="switchTab('dashboard-tab')">
+                  <i class="fa-solid fa-chart-simple"></i> View ROC & Benchmarks
+                </button>
+              </div>
+            </div>
+            <div class="hero-stats-panel">
+              <div class="stat-mini-card">
+                <span class="stat-mini-label">Champion Model</span>
+                <span class="stat-mini-value" id="hero-champion-name">Support Vector Machine</span>
+                <span class="stat-mini-sub">Calibrated Probability Classifier</span>
+              </div>
+              <div class="stat-mini-card">
+                <span class="stat-mini-label">Holdout Test Accuracy & AUC</span>
+                <span class="stat-mini-value accent-green" id="hero-accuracy-val">98.45% (AUC 0.992)</span>
+                <span class="stat-mini-sub">Evaluated on 1,030 unseen samples</span>
+              </div>
+              <div class="stat-mini-card">
+                <span class="stat-mini-label">False Positive Rate</span>
+                <span class="stat-mini-value accent-blue" id="hero-fp-rate">0.66%</span>
+                <span class="stat-mini-sub">Guaranteed protection for genuine mail</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- How It Works Flow -->
+          <div class="section-heading">
+            <h3>Explainable Machine Learning Architecture</h3>
+            <p>End-to-end data processing workflow from raw text to probabilistic classification & feature attribution</p>
+          </div>
+
+          <div class="pipeline-grid">
+            <div class="pipeline-card">
+              <div class="step-num">01</div>
+              <div class="step-icon"><i class="fa-solid fa-filter"></i></div>
+              <h4>NLP Sanitization</h4>
+              <p>Removes HTML, strips punctuation noise, normalizes URLs & currencies into canonical tokens, and removes English stopwords.</p>
+            </div>
+            <div class="pipeline-card">
+              <div class="step-num">02</div>
+              <div class="step-icon"><i class="fa-solid fa-vector-square"></i></div>
+              <h4>TF-IDF Feature Space</h4>
+              <p>Projects n-grams (1, 2) into a 4,000-dimensional sparse feature space with sublinear term frequency scaling.</p>
+            </div>
+            <div class="pipeline-card">
+              <div class="step-num">03</div>
+              <div class="step-icon"><i class="fa-solid fa-brain"></i></div>
+              <h4>Calibrated Inference</h4>
+              <p>Classifies vectors using Platt-scaled Linear SVM boundaries to yield true probabilities and confidence levels.</p>
+            </div>
+            <div class="pipeline-card">
+              <div class="step-num">04</div>
+              <div class="step-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+              <h4>Explainable AI (XAI)</h4>
+              <p>Decomposes decision value into word attributions (w_i · x_i) to visually highlight suspicious words and legitimate anchors.</p>
+            </div>
+          </div>
+
+          <!-- Feature Highlights -->
+          <div class="features-summary-grid">
+            <div class="feature-box">
+              <i class="fa-solid fa-user-secret feature-icon"></i>
+              <div>
+                <h4>Phishing vs. Ordinary Spam Separation</h4>
+                <p>Decoupled forensic analyzer detects suspicious IP URLs, urgency coercion, credential harvesting, and brand impersonation.</p>
+              </div>
+            </div>
+            <div class="feature-box">
+              <i class="fa-solid fa-gauge-high feature-icon"></i>
+              <div>
+                <h4>0 - 100 Security Risk Scoring</h4>
+                <p>Translates statistical model confidence and forensic indicators into an actionable operational security risk index.</p>
+              </div>
+            </div>
+            <div class="feature-box">
+              <i class="fa-solid fa-file-csv feature-icon"></i>
+              <div>
+                <h4>High-Speed Bulk Classification</h4>
+                <p>Upload CSV mailboxes, classify hundreds of emails simultaneously via matrix operations, and export enriched audit reports.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- 2. Email Classification Tab -->
+        <section id="classify-tab" class="tab-pane">
+          <div class="classify-layout">
+            <!-- Left Column: Input Form -->
+            <div class="classify-card input-card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Analyze Email Message</h3>
+                  <p class="card-desc">Paste subject and body text to inspect for spam, phishing, and threat patterns</p>
+                </div>
+                <div class="char-counter">
+                  <span id="word-count">0</span> words | <span id="char-count">0</span> chars
+                </div>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-bar">
+                <span class="preset-label">Insert Preset:</span>
+                <button class="preset-pill" onclick="loadPreset('phishing')">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Phishing Urgency
+                </button>
+                <button class="preset-pill" onclick="loadPreset('lottery')">
+                  <i class="fa-solid fa-gift"></i> Lottery Prize
+                </button>
+                <button class="preset-pill" onclick="loadPreset('meeting')">
+                  <i class="fa-solid fa-briefcase"></i> Work Meeting
+                </button>
+                <button class="preset-pill" onclick="loadPreset('personal')">
+                  <i class="fa-solid fa-user-group"></i> Personal Note
+                </button>
+              </div>
+
+              <!-- Text Area -->
+              <div class="textarea-wrapper">
+                <textarea 
+                  id="email-input" 
+                  rows="10" 
+                  placeholder="Paste email content here (e.g., 'URGENT: Your account access has been compromised. Verify credentials at http://security-verify.net...')"
+                ></textarea>
+                <div id="input-error" class="input-error-msg hidden"></div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="card-actions">
+                <button class="btn btn-outline" id="clear-input-btn">
+                  <i class="fa-solid fa-eraser"></i> Clear
+                </button>
+                <button class="btn btn-primary btn-md" id="classify-btn">
+                  <span id="classify-spinner" class="spinner hidden"></span>
+                  <i class="fa-solid fa-bolt" id="classify-btn-icon"></i>
+                  <span id="classify-btn-text">Classify & Explain</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Result Diagnostic Card -->
+            <div class="classify-card result-card" id="result-placeholder-card">
+              <div class="empty-result-state">
+                <div class="empty-icon-ring">
+                  <i class="fa-solid fa-envelope-circle-check"></i>
+                </div>
+                <h4>Awaiting Input</h4>
+                <p>Paste an email message on the left and click <strong>Classify & Explain</strong> to see predictions, XAI feature attributions, and threat diagnostics.</p>
+              </div>
+            </div>
+
+            <!-- Dynamic Result Card (hidden until prediction) -->
+            <div class="classify-card result-card hidden" id="result-card">
+              <div class="card-header border-bottom">
+                <h3 class="card-title">Threat Assessment Verdict</h3>
+                <span class="timestamp-badge" id="result-timestamp">Just now</span>
+              </div>
+
+              <!-- Verdict Banner -->
+              <div class="verdict-banner" id="verdict-banner">
+                <div class="verdict-status-icon" id="verdict-status-icon">
+                  <i class="fa-solid fa-shield-virus"></i>
+                </div>
+                <div class="verdict-meta">
+                  <span class="verdict-tag" id="verdict-tag">ML DETECTION OUTCOME</span>
+                  <h2 class="verdict-title" id="verdict-title">SPAM DETECTED</h2>
+                  <p class="verdict-desc" id="verdict-desc">This email contains linguistic indicators strongly correlated with spam or malicious intent.</p>
+                </div>
+              </div>
+
+              <!-- Composite Risk Score & Calibrated Confidence Grid -->
+              <div class="metrics-dual-grid">
+                <!-- 0 - 100 Risk Score Card -->
+                <div class="metric-box risk-metric-box">
+                  <div class="metric-box-header">
+                    <span>Security Risk Index</span>
+                    <span class="severity-pill" id="risk-severity-pill">CRITICAL</span>
+                  </div>
+                  <div class="risk-score-display">
+                    <span class="risk-score-number" id="risk-score-number">85</span>
+                    <span class="risk-score-total">/ 100</span>
+                  </div>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="risk-progress-bar" style="width: 85%;"></div>
+                  </div>
+                  <p class="risk-action-advice" id="risk-action-advice">Treat with extreme caution.</p>
+                </div>
+
+                <!-- Model Probability & Confidence Card -->
+                <div class="metric-box conf-metric-box">
+                  <div class="metric-box-header">
+                    <span>Calibrated ML Confidence</span>
+                    <strong id="conf-percentage">98.5%</strong>
+                  </div>
+                  <div class="prob-mini-split">
+                    <div class="prob-row">
+                      <span>P(Spam)</span>
+                      <strong id="spam-prob-num">0.985</strong>
+                    </div>
+                    <div class="mini-bar-track">
+                      <div class="mini-bar-fill fill-red" id="spam-mini-bar" style="width: 98.5%"></div>
+                    </div>
+                    <div class="prob-row" style="margin-top: 8px;">
+                      <span>P(Legitimate)</span>
+                      <strong id="ham-prob-num">0.015</strong>
+                    </div>
+                    <div class="mini-bar-track">
+                      <div class="mini-bar-fill fill-green" id="ham-mini-bar" style="width: 1.5%"></div>
+                    </div>
+                  </div>
+                  <span class="prob-concept-note">
+                    <i class="fa-solid fa-circle-info"></i> Probability measures lexical similarity to spam corpus; Risk Score measures operational danger.
+                  </span>
+                </div>
+              </div>
+
+              <!-- Explainable AI (XAI) Word Highlighter Section -->
+              <div class="xai-highlight-card">
+                <div class="xai-header">
+                  <div class="xai-title-wrap">
+                    <i class="fa-solid fa-wand-magic-sparkles text-primary"></i>
+                    <strong>Explainable AI — In-Text Word Contributions</strong>
+                  </div>
+                  <div class="xai-legend">
+                    <span class="legend-chip chip-spam"><span class="chip-color red"></span> Suspicious / Spam Trigger</span>
+                    <span class="legend-chip chip-ham"><span class="chip-color green"></span> Legitimate Anchor</span>
+                  </div>
+                </div>
+                <div class="highlighted-email-text" id="highlighted-email-display">
+                  <em>Annotated text will appear here...</em>
+                </div>
+                <div class="natural-explanation-box" id="natural-explanation-box">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  <span id="natural-explanation-text">Analysis explanation...</span>
+                </div>
+              </div>
+
+              <!-- Positive vs. Negative Feature Contributions Bars -->
+              <div class="feature-contributions-card">
+                <h4 class="subcard-title">Top Contributing Tokens (Linear Feature Attribution)</h4>
+                <div class="contributions-two-col">
+                  <!-- Pushing Toward Spam -->
+                  <div class="contrib-col">
+                    <span class="contrib-col-header text-danger"><i class="fa-solid fa-arrow-trend-up"></i> Pushing Toward Spam (+)</span>
+                    <div class="contrib-list" id="spam-contrib-list">
+                      <em>No spam-driving tokens</em>
+                    </div>
+                  </div>
+                  <!-- Pushing Toward Ham -->
+                  <div class="contrib-col">
+                    <span class="contrib-col-header text-success"><i class="fa-solid fa-arrow-trend-down"></i> Pushing Toward Legitimate (-)</span>
+                    <div class="contrib-list" id="ham-contrib-list">
+                      <em>No legitimate anchors</em>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rule-Based Phishing & Forensic Threat Indicators -->
+              <div class="phishing-forensics-card" id="phishing-forensics-card">
+                <div class="forensics-header">
+                  <div>
+                    <h4 class="subcard-title" style="margin: 0;">Rule-Based Forensic Threat Intelligence</h4>
+                    <span class="forensics-subtitle">Decoupled heuristic inspection (URLs, urgency, credentials, impersonation)</span>
+                  </div>
+                  <span class="threat-level-badge" id="threat-level-badge">CRITICAL THREAT</span>
+                </div>
+
+                <div class="forensics-indicators-grid" id="forensics-indicators-grid">
+                  <!-- Dynamically populated -->
+                </div>
+
+                <div class="safety-disclaimer-box" id="safety-disclaimer-box">
+                  <i class="fa-solid fa-shield-halved"></i>
+                  <span id="safety-disclaimer-text">Rule-based threat indicators operate independently from statistical Machine Learning.</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
+        <!-- 3. Bulk CSV Scanner Tab (NEW) -->
+        <section id="bulk-tab" class="tab-pane">
+          <div class="bulk-container">
+            <div class="bulk-header-card">
+              <div class="bulk-info">
+                <h3>High-Throughput Bulk Email Classification</h3>
+                <p>Upload a CSV file containing an email column (e.g. <code>email</code>, <code>text</code>, <code>message</code>). Process hundreds of emails simultaneously using high-speed matrix inference and export enriched audit reports.</p>
+              </div>
+              <div class="bulk-actions-top">
+                <button class="btn btn-outline" id="load-sample-bulk-btn">
+                  <i class="fa-solid fa-vial"></i> Load Sample Test Batch
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="dropzone-card" id="bulk-dropzone">
+              <input type="file" id="bulk-file-input" accept=".csv" class="hidden" />
+              <div class="dropzone-content">
+                <div class="dropzone-icon">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h4>Drag & Drop CSV Mailbox File Here</h4>
+                <p>or click to browse your local computer (Max 16 MB, up to 2,500 rows per batch)</p>
+                <button class="btn btn-primary" onclick="document.getElementById('bulk-file-input').click()">
+                  <i class="fa-solid fa-folder-open"></i> Select CSV File
+                </button>
+                <div id="upload-status" class="upload-status hidden"></div>
+              </div>
+            </div>
+
+            <!-- Bulk Results Container (hidden until processing) -->
+            <div id="bulk-results-panel" class="bulk-results-panel hidden">
+              <!-- Summary Cards -->
+              <div class="stats-cards-grid">
+                <div class="stat-card">
+                  <div class="stat-card-icon icon-blue">
+                    <i class="fa-solid fa-envelope"></i>
+                  </div>
+                  <div class="stat-card-data">
+                    <span class="stat-label">Total Emails Processed</span>
+                    <h3 class="stat-val" id="bulk-total-val">0</h3>
+                    <span class="stat-delta" id="bulk-filename-val">file.csv</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-icon icon-red">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                  </div>
+                  <div class="stat-card-data">
+                    <span class="stat-label">Spam Intercepted</span>
+                    <h3 class="stat-val accent-red" id="bulk-spam-val">0</h3>
+                    <span class="stat-delta" id="bulk-spam-rate-val">0%</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-icon icon-green">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </div>
+                  <div class="stat-card-data">
+                    <span class="stat-label">Legitimate (Ham)</span>
+                    <h3 class="stat-val accent-green" id="bulk-ham-val">0</h3>
+                    <span class="stat-delta">Cleared emails</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-icon icon-purple">
+                    <i class="fa-solid fa-skull-crossbones"></i>
+                  </div>
+                  <div class="stat-card-data">
+                    <span class="stat-label">High-Risk Threats (≥75)</span>
+                    <h3 class="stat-val accent-purple" id="bulk-high-risk-val">0</h3>
+                    <span class="stat-delta">Action required</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Results Table Header & Download Action -->
+              <div class="bulk-table-card">
+                <div class="card-header border-bottom">
+                  <div>
+                    <h3 class="card-title">Classified Batch Output (First 100 Rows Preview)</h3>
+                    <p class="card-desc">Showing predictions, risk levels, and detected forensic threat signals</p>
+                  </div>
+                  <a href="/api/download-bulk" class="btn btn-primary" id="download-bulk-csv-btn">
+                    <i class="fa-solid fa-download"></i> Download Full Results (CSV)
+                  </a>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="history-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Email Preview</th>
+                        <th>Classification</th>
+                        <th>Confidence</th>
+                        <th>Risk Score</th>
+                        <th>Top Threat Signal</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bulk-table-body">
+                      <!-- Populated via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- 4. Dashboard / ML Analytics & ROC Tab -->
+        <section id="dashboard-tab" class="tab-pane">
+          <!-- Metric Stat Counter Cards -->
+          <div class="stats-cards-grid">
+            <div class="stat-card">
+              <div class="stat-card-icon icon-blue">
+                <i class="fa-solid fa-inbox"></i>
+              </div>
+              <div class="stat-card-data">
+                <span class="stat-label">Total Emails Classified</span>
+                <h3 class="stat-val" id="stat-total-emails">0</h3>
+                <span class="stat-delta">Live user predictions</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon icon-red">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <div class="stat-card-data">
+                <span class="stat-label">Spam Intercepted</span>
+                <h3 class="stat-val accent-red" id="stat-total-spam">0</h3>
+                <span class="stat-delta" id="stat-spam-rate">0% of total</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon icon-green">
+                <i class="fa-solid fa-envelope-circle-check"></i>
+              </div>
+              <div class="stat-card-data">
+                <span class="stat-label">Legitimate (Ham)</span>
+                <h3 class="stat-val accent-green" id="stat-total-ham">0</h3>
+                <span class="stat-delta" id="stat-ham-rate">0% of total</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon icon-purple">
+                <i class="fa-solid fa-crosshairs"></i>
+              </div>
+              <div class="stat-card-data">
+                <span class="stat-label">Champion Accuracy & AUC</span>
+                <h3 class="stat-val accent-purple" id="stat-champion-acc">98.45%</h3>
+                <span class="stat-delta" id="stat-champion-auc">ROC-AUC: 0.9922</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 1: Model Comparison & ROC Curves -->
+          <div class="charts-two-col">
+            <!-- Model Performance Benchmarks Bar Chart -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3 class="chart-title">Model Performance Benchmarks</h3>
+                  <p class="chart-subtitle">Comparing 4 algorithms evaluated on 1,030 test samples</p>
+                </div>
+                <span class="chart-badge">Holdout Metrics</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="modelComparisonChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Multi-Model ROC Curves Chart (NEW) -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3 class="chart-title">Receiver Operating Characteristic (ROC) Curves</h3>
+                  <p class="chart-subtitle">True Positive Rate vs. False Positive Rate discrimination</p>
+                </div>
+                <span class="chart-badge">ROC-AUC</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="rocCurvesChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 2: Confusion Matrix & Traffic Ratio -->
+          <div class="charts-two-col">
+            <!-- Confusion Matrix Diagnostics Card -->
+            <div class="cm-card">
+              <div class="cm-header">
+                <div>
+                  <h3 class="chart-title">Confusion Matrix Diagnostics</h3>
+                  <p class="chart-subtitle">Champion Model (Calibrated Linear SVM) on 1,030 Unseen Samples</p>
+                </div>
+                <div class="cm-pill">F1-Score: <strong>93.65%</strong></div>
+              </div>
+
+              <div class="cm-container">
+                <div class="cm-grid">
+                  <!-- True Negative -->
+                  <div class="cm-cell cell-tn">
+                    <div class="cm-cell-tag">True Negative (TN)</div>
+                    <div class="cm-cell-value" id="cm-tn">896</div>
+                    <div class="cm-cell-desc">Legitimate correctly passed</div>
+                  </div>
+
+                  <!-- False Positive -->
+                  <div class="cm-cell cell-fp">
+                    <div class="cm-cell-tag">False Positive (FP)</div>
+                    <div class="cm-cell-value" id="cm-fp">6</div>
+                    <div class="cm-cell-desc">Legitimate falsely marked</div>
+                  </div>
+
+                  <!-- False Negative -->
+                  <div class="cm-cell cell-fn">
+                    <div class="cm-cell-tag">False Negative (FN)</div>
+                    <div class="cm-cell-value" id="cm-fn">10</div>
+                    <div class="cm-cell-desc">Spam missed</div>
+                  </div>
+
+                  <!-- True Positive -->
+                  <div class="cm-cell cell-tp">
+                    <div class="cm-cell-tag">True Positive (TP)</div>
+                    <div class="cm-cell-value" id="cm-tp">118</div>
+                    <div class="cm-cell-desc">Spam successfully caught</div>
+                  </div>
+                </div>
+
+                <!-- CM Metrics explanation -->
+                <div class="cm-stats-summary">
+                  <div class="cm-stat-row">
+                    <span>Spam Precision</span>
+                    <strong id="cm-prec">95.16%</strong>
+                  </div>
+                  <div class="cm-stat-row">
+                    <span>Spam Recall</span>
+                    <strong id="cm-rec">92.19%</strong>
+                  </div>
+                  <div class="cm-stat-row">
+                    <span>False Alarm Rate</span>
+                    <strong id="cm-far">0.66%</strong>
+                  </div>
+                  <div class="cm-stat-row">
+                    <span>ROC-AUC Score</span>
+                    <strong id="cm-auc">0.9922</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Distribution Chart -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3 class="chart-title">Classified Traffic Ratio</h3>
+                  <p class="chart-subtitle">Spam vs Ham breakdown of incoming queries</p>
+                </div>
+                <span class="chart-badge">Live DB</span>
+              </div>
+              <div class="chart-canvas-container doughnut-wrapper">
+                <canvas id="trafficRatioChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- 5. History Tab -->
+        <section id="history-tab" class="tab-pane">
+          <div class="history-card">
+            <div class="card-header border-bottom">
+              <div>
+                <h3 class="card-title">Prediction Audit Trail</h3>
+                <p class="card-desc">Persistent logs of all classified emails saved in SQLite</p>
+              </div>
+              <div class="history-actions">
+                <div class="search-box">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="history-search" placeholder="Filter history..." />
+                </div>
+                <button class="btn btn-danger-outline" id="clear-history-btn">
+                  <i class="fa-solid fa-trash-can"></i> Clear History
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Email Preview</th>
+                    <th>Classification</th>
+                    <th>Confidence</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <tr>
+                    <td colspan="5" class="empty-table-msg">
+                      <i class="fa-solid fa-inbox"></i> No classifications recorded yet. Analyze an email to begin.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Application Script -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
